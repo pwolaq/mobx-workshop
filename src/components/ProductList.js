@@ -17,6 +17,7 @@ const getSortStrategy = sortBy => {
 class ProductList extends React.Component {
     state = {
         sortBy: null,
+        searchBy: '',
         products: [
             {id: 0, name: 'Apple', tags: ['Fruit'], price: 15},
             {id: 1, name: 'Coffee', tags: ['Beverage'], price: 10},
@@ -32,27 +33,34 @@ class ProductList extends React.Component {
         } : product)
     }));
 
-    handleSortClick = sortBy => this.setState(prevState => {
-        const strategy = getSortStrategy(sortBy);
+    handleSortClick = sortBy => this.setState(() => ({
+        sortBy
+    }));
 
-        return {
-            sortBy,
-            products: prevState.products.sort(strategy)
-        };
+    handleSearch = e => this.setState({
+        searchBy: e.currentTarget.value
     });
 
     render() {
+        const sortStrategy = getSortStrategy(this.state.sortBy);
+        const searchBy = this.state.searchBy.toLowerCase();
+        const sortedProducts = this.state.products.sort(sortStrategy);
+        const filteredProducts = searchBy !== '' ? sortedProducts.filter(product => product.name.toLowerCase().includes(searchBy)) : sortedProducts;
+
         return (
             <div className="container">
-                <h1 className="mb-3 mt-3">
-                    Product list
-                    <div className="float-right">
+                <h1 className="mb-3 mt-3 d-flex justify-content-between align-items-center">
+                    <div className="d-flex align-items-center">
+                        <span>Product list</span>
+                        <input className="ml-3 form-control" style={{ width: 200 }} type="text" value={this.state.searchBy} onChange={this.handleSearch} placeholder="Search..." />
+                    </div>
+                    <div>
                         <button className="btn btn-success" onClick={() => this.handleSortClick(SORT_BY_NAME)}>Sort by name</button>
                         <button className="ml-3 btn btn-success" onClick={() => this.handleSortClick(SORT_BY_PRICE)}>Sort by price</button>
                     </div>
                 </h1>
                 <ul className="list-group">
-                    {this.state.products.map(product => (
+                    {filteredProducts.map(product => (
                         <li className="list-group-item" key={product.id}>
                             <Product {...product} onBuyClick={this.handleBuyClick} />
                         </li>
