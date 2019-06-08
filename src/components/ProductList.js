@@ -1,11 +1,12 @@
 import React from 'react';
-import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import Product from "./Product";
 import ProductStore from '../stores/ProductStore';
 
 export const SORT_BY_NAME = 'SORT_BY_NAME';
 export const SORT_BY_PRICE = 'SORT_BY_PRICE';
 
+@inject('productStore')
 @observer
 class ProductList extends React.Component {
     handleBuyClick = id => ProductStore.buyProduct(id);
