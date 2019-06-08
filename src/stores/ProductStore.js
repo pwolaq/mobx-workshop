@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import {SORT_BY_NAME, SORT_BY_PRICE} from "../components/ProductList";
 
 const getSortStrategy = sortBy => {
@@ -12,7 +12,7 @@ const getSortStrategy = sortBy => {
 };
 
 class ProductStore {
-    @observable products = [
+    @observable __products = [
         {id: 0, name: 'Apple', tags: ['Fruit'], price: 15, isSold: false},
         {id: 1, name: 'Coffee', tags: ['Beverage'], price: 10, isSold: false},
         {id: 2, name: 'Golden Apple', tags: ['Fruit', 'Valuable'], price: 50, isSold: false},
@@ -34,11 +34,11 @@ class ProductStore {
 
     @action search = e => this.searchBy = e.currentTarget.value;
 
-    getProducts = () => {
+    @computed get products() {
         const sortStrategy = getSortStrategy(this.sortBy);
         const searchBy = this.searchBy.toLowerCase();
-        const filteredProducts = searchBy !== '' ? this.products.filter(product => product.name.toLowerCase().includes(searchBy)) : this.products;
-        return this.sortReverse ? filteredProducts.sort(sortStrategy).reverse() : filteredProducts.sort(sortStrategy);
+        const filteredProducts = searchBy !== '' ? this.__products.filter(product => product.name.toLowerCase().includes(searchBy)) : this.__products;
+        return this.sortReverse ? [...filteredProducts].sort(sortStrategy).reverse() : [...filteredProducts].sort(sortStrategy);
     }
 }
 

@@ -6,7 +6,7 @@ import Root from "./containers/Root";
 
 import {configure} from 'mobx';
 
-configure({ enforceActions: true });
+configure({ enforceActions: 'always' });
 
 ReactDOM.render(<Root />, document.getElementById('root'));
 

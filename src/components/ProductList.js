@@ -1,7 +1,6 @@
 import React from 'react';
 import {observer, inject} from 'mobx-react';
 import Product from "./Product";
-import ProductStore from '../stores/ProductStore';
 
 export const SORT_BY_NAME = 'SORT_BY_NAME';
 export const SORT_BY_PRICE = 'SORT_BY_PRICE';
@@ -9,11 +8,11 @@ export const SORT_BY_PRICE = 'SORT_BY_PRICE';
 @inject('productStore')
 @observer
 class ProductList extends React.Component {
-    handleBuyClick = id => ProductStore.buyProduct(id);
+    handleBuyClick = id => this.props.productStore.buyProduct(id);
 
-    handleSortClick = sortBy => ProductStore.sort(sortBy);
+    handleSortClick = sortBy => this.props.productStore.sort(sortBy);
 
-    handleSearch = e => ProductStore.search(e);
+    handleSearch = e => this.props.productStore.search(e);
 
     render() {
         return (
@@ -21,7 +20,7 @@ class ProductList extends React.Component {
                 <h1 className="mb-3 mt-3 d-flex justify-content-between align-items-center">
                     <div className="d-flex align-items-center">
                         <span>Product list</span>
-                        <input className="ml-3 form-control" style={{ width: 200 }} type="text" value={ProductStore.searchBy} onChange={this.handleSearch} placeholder="Search..." />
+                        <input className="ml-3 form-control" style={{ width: 200 }} type="text" value={this.props.productStore.searchBy} onChange={this.handleSearch} placeholder="Search..." />
                     </div>
                     <div>
                         <button className="btn btn-success" onClick={() => this.handleSortClick(SORT_BY_NAME)}>Sort by name</button>
@@ -29,7 +28,7 @@ class ProductList extends React.Component {
                     </div>
                 </h1>
                 <ul className="list-group">
-                    {ProductStore.getProducts().map(product => (
+                    {this.props.productStore.products.map(product => (
                         <li className="list-group-item" key={product.id}>
                             <Product {...product} onBuyClick={this.handleBuyClick} />
                         </li>
