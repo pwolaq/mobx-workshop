@@ -1,4 +1,5 @@
 import React from 'react';
+import Product from "./Product";
 
 class ProductList extends React.Component {
     state = {
@@ -12,7 +13,9 @@ class ProductList extends React.Component {
         return (
             <ul>
                 {this.state.products.map(({id, name}) => (
-                    <li key={id}>{name}</li>
+                    <li key={id}>
+                        <Product name={name} />
+                    </li>
                 ))}
             </ul>
         )
