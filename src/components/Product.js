@@ -1,4 +1,5 @@
 import React from 'react';
+import {observer} from "mobx-react";
 import Tags from "./Tags";
 
 const Product = ({ id, name, tags, onBuyClick, price, isSold }) => {
@@ -13,4 +14,4 @@ const Product = ({ id, name, tags, onBuyClick, price, isSold }) => {
     );
 };
 
-export default Product;
+export default observer(Product);
