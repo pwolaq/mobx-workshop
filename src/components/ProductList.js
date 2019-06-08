@@ -50,8 +50,8 @@ class ProductList extends React.Component {
     render() {
         const sortStrategy = getSortStrategy(this.state.sortBy);
         const searchBy = this.state.searchBy.toLowerCase();
-        const sortedProducts = this.state.sortReverse ? this.state.products.sort(sortStrategy).reverse() : this.state.products.sort(sortStrategy);
-        const filteredProducts = searchBy !== '' ? sortedProducts.filter(product => product.name.toLowerCase().includes(searchBy)) : sortedProducts;
+        const filteredProducts = searchBy !== '' ? this.state.products.filter(product => product.name.toLowerCase().includes(searchBy)) : this.state.products;
+        const sortedProducts = this.state.sortReverse ? filteredProducts.sort(sortStrategy).reverse() : filteredProducts.sort(sortStrategy);
 
         return (
             <div className="container">
@@ -66,7 +66,7 @@ class ProductList extends React.Component {
                     </div>
                 </h1>
                 <ul className="list-group">
-                    {filteredProducts.map(product => (
+                    {sortedProducts.map(product => (
                         <li className="list-group-item" key={product.id}>
                             <Product {...product} onBuyClick={this.handleBuyClick} />
                         </li>
