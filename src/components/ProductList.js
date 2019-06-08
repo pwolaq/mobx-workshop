@@ -17,6 +17,7 @@ const getSortStrategy = sortBy => {
 class ProductList extends React.Component {
     state = {
         sortBy: null,
+        sortReverse: false,
         searchBy: '',
         products: [
             {id: 0, name: 'Apple', tags: ['Fruit'], price: 15},
@@ -33,9 +34,14 @@ class ProductList extends React.Component {
         } : product)
     }));
 
-    handleSortClick = sortBy => this.setState(() => ({
-        sortBy
-    }));
+    handleSortClick = sortBy => this.setState(prevState => {
+        const sortReverse = prevState.sortBy === sortBy ? !prevState.sortReverse : false;
+
+        return {
+            sortReverse,
+            sortBy
+        }
+    });
 
     handleSearch = e => this.setState({
         searchBy: e.currentTarget.value
@@ -44,7 +50,7 @@ class ProductList extends React.Component {
     render() {
         const sortStrategy = getSortStrategy(this.state.sortBy);
         const searchBy = this.state.searchBy.toLowerCase();
-        const sortedProducts = this.state.products.sort(sortStrategy);
+        const sortedProducts = this.state.sortReverse ? this.state.products.sort(sortStrategy).reverse() : this.state.products.sort(sortStrategy);
         const filteredProducts = searchBy !== '' ? sortedProducts.filter(product => product.name.toLowerCase().includes(searchBy)) : sortedProducts;
 
         return (
